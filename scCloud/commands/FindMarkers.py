@@ -1,5 +1,6 @@
 from .Base import Base
-from scCloud.tools import run_find_markers
+from scCloud.pipeline.gradient_boosting import run_find_markers
+
 
 class FindMarkers(Base):
     """

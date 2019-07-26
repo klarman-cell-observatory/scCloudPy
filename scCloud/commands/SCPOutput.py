@@ -1,5 +1,5 @@
 from .Base import Base
-from ..tools import run_scp_output
+from ..pipeline import run_scp_output
 
 class SCPOutput(Base):
     """

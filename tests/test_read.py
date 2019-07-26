@@ -20,3 +20,7 @@ class TestRead(unittest.TestCase):
 	def test_mtx_v3_dir(self):
 		adata = sc.tools.read_input('data/hgmm_1k_v3_filtered_feature_bc_matrix/')
 		self.assertEqual(adata.shape[0], 1046)
+
+
+if __name__ == '__main__':
+	unittest.main()

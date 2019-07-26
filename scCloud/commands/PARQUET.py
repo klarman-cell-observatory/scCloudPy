@@ -1,5 +1,6 @@
 from .Base import Base
-from ..tools import run_conversion
+from scCloud.pipeline import run_conversion
+
 
 class PARQUET(Base):
     """

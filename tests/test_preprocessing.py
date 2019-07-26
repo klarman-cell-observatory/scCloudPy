@@ -20,3 +20,7 @@ class TestPreprocessing(unittest.TestCase):
 		adata = anndata.AnnData(X)
 		sc.tools.filter_cells_cite_seq(adata, 2)
 		self.assertEqual(adata.shape[0], 2)
+
+
+if __name__ == '__main__':
+	unittest.main()

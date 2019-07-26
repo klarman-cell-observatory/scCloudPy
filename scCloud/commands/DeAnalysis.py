@@ -1,6 +1,7 @@
 import os
 from .Base import Base
-from ..tools import run_de_analysis
+from scCloud.pipeline.de_analysis import run_de_analysis
+
 
 class DeAnalysis(Base):
     """
@@ -16,14 +17,14 @@ Arguments:
 
 Options:
   --labels <attr>                  <attr> used as cluster labels. [default: louvain_labels]
-  --subset <attr:value>            Perform DE analysis only on a subset of cells with attr == value. 
+  --subset <attr:value>            Perform DE analysis only on a subset of cells with attr == value.
   --alpha <alpha>                  Control false discovery rate at <alpha>. [default: 0.05]
   --fisher                         Calculate Fisher's exact test.
   --mwu                            Calculate Mann-Whitney U test.
   --roc                            Calculate area under cuver in ROC curve.
   --temp-folder <temp_folder>      Joblib temporary folder for memmapping numpy arrays.
   -p <threads>                     Use <threads> threads. [default: 1]
-  
+
   -h, --help                       Print out help information.
 
 Outputs:
