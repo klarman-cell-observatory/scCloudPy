@@ -13,6 +13,7 @@ def assert_excel_equal(test_case, path, test_path):
 
 
 def assert_dict_of_arrays_equal(test_case, dict1, dict2, blacklist):
+    # TODO handle nested
     if blacklist is None:
         blacklist = set()
     list1_keys = set(dict1.keys())
