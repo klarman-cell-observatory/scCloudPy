@@ -28,16 +28,19 @@ def assert_dict_of_arrays_equal(test_case, dict1, dict2):
             np.testing.assert_array_equal(val1, val2, err_msg=str(key) + ' not equal')
 
 
-def assert_adata_equal(test_case, path, test_path):
+def assert_adata_files_equal(test_case, path, test_path):
     test_data = sc.tools.read_input(test_path, mode='a')
     data = sc.tools.read_input(path, mode='a')
+    assert_adata_equal(test_case, data, test_data)
 
-    if scipy.sparse.issparse(data.X):
-        data.X = data.X.toarray()
-    if scipy.sparse.issparse(test_data.X):
-        test_data.X = test_data.X.toarray()
-    np.testing.assert_array_almost_equal(data.X, test_data.X)
-    pd.testing.assert_frame_equal(test_data.obs, data.obs)
-    pd.testing.assert_frame_equal(test_data.var, data.var)
-    assert_dict_of_arrays_equal(test_case, test_data.uns, data.uns)
-    assert_dict_of_arrays_equal(test_case, test_data.obsm, data.obsm)
+
+def assert_adata_equal(test_case, data1, data2):
+    if scipy.sparse.issparse(data1.X):
+        data1.X = data1.X.toarray()
+    if scipy.sparse.issparse(data2.X):
+        data2.X = data2.X.toarray()
+    np.testing.assert_array_almost_equal(data1.X, data2.X)
+    pd.testing.assert_frame_equal(data1.obs, data2.obs)
+    pd.testing.assert_frame_equal(data1.var, data2.var)
+    assert_dict_of_arrays_equal(test_case, data1.uns, data2.uns)
+    assert_dict_of_arrays_equal(test_case, data1.obsm, data2.obsm)

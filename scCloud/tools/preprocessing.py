@@ -86,8 +86,12 @@ def log_norm(data, norm_count):
     print("Normalization is finished. Time spent = {:.2f}s.".format(end - start))
 
 
-def pca(data, standardize=True, max_value=10, nPC=50, random_state=0):
+def pca(data, standardize=True, max_value=10, nPC=50, random_state=0, features=None):
     start = time.time()
+    orig_data = data
+    if features is not None:
+        data = data[:, data.var[features]].copy()
+
     if issparse(data.X):
         data.X = data.X.toarray()
 
@@ -101,11 +105,12 @@ def pca(data, standardize=True, max_value=10, nPC=50, random_state=0):
 
     pca = PCA(n_components=nPC, random_state=random_state)
     X_pca = pca.fit_transform(data.X)
-    data.obsm['X_pca'] = X_pca
-    data.varm['PCs'] = pca.components_.T
-    data.uns['pca'] = {}
-    data.uns['pca']['variance'] = pca.explained_variance_
-    data.uns['pca']['variance_ratio'] = pca.explained_variance_ratio_
+    orig_data.obsm['X_pca'] = X_pca
+   # orig_data.varm['PCs'] = pca.components_.T
+    orig_data.uns['pca'] = {}
+    orig_data.uns['pca']['components'] = pca.components_.T
+    orig_data.uns['pca']['variance'] = pca.explained_variance_
+    orig_data.uns['pca']['variance_ratio'] = pca.explained_variance_ratio_
     end = time.time()
     print("PCA is done. Time spent = {:.2f}s.".format(end - start))
 

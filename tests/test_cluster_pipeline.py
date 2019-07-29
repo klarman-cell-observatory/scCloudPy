@@ -1,7 +1,7 @@
 import unittest
 import os
 import scCloud.commands
-from .test_util import assert_adata_equal
+from .test_util import assert_adata_files_equal
 
 
 class TestClusterPipeline(unittest.TestCase):
@@ -15,7 +15,7 @@ class TestClusterPipeline(unittest.TestCase):
              '--run-approximated-leiden', '--run-tsne', '--run-umap',
              '--run-net-tsne', '--run-net-fitsne', '--run-net-umap', '--run-fitsne'])
         cmd.execute()
-        assert_adata_equal(self, os.path.join('tests', 'output', 'test_cluster.h5ad'), 'test_cluster.h5ad')
+        assert_adata_files_equal(self, os.path.join('tests', 'output', 'test_cluster.h5ad'), 'test_cluster.h5ad')
 
 
 # '--run-approximated-louvain',
