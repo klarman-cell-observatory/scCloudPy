@@ -15,7 +15,12 @@ def assert_excel_equal(test_case, path, test_path):
 def assert_adata_equal(test_case, path, test_path):
     test_data = sc.tools.read_input(test_path)
     data = sc.tools.read_input(path)
-    test_case.assertEqual((test_data.X[()] != data.X[()]).sum(), 0)
+    X = data.X[()]
+    test_X = test_data.X[()]
+    if scipy.sparse.issparse(X):
+        X = X.toarray()
+        test_X = test_X.toarray()
+    np.testing.assert_array_almost_equal(X, test_X)
     pd.testing.assert_frame_equal(test_data.obs, data.obs)
     pd.testing.assert_frame_equal(test_data.var, data.var)
     test_case.assertListEqual(list(test_data.uns.keys()), list(data.uns.keys()))
@@ -26,11 +31,11 @@ def assert_adata_equal(test_case, path, test_path):
         if scipy.sparse.issparse(val):
             val = val.toarray()
             test_val = test_val.toarray()
-        np.testing.assert_array_equal(test_val, val)
+        np.testing.assert_array_almost_equal(test_val, val)
     for key in data.obsm_keys():
         test_val = test_data.obsm[key]
         val = data.obsm[key]
         if scipy.sparse.issparse(val):
             val = val.toarray()
             test_val = test_val.toarray()
-        np.testing.assert_array_equal(test_val, val)
+        np.testing.assert_array_almost_equal(test_val, val)
