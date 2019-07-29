@@ -12,30 +12,32 @@ def assert_excel_equal(test_case, path, test_path):
         pd.testing.assert_frame_equal(test_output[key], output[key])
 
 
+def assert_dict_of_arrays_equal(test_case, dict1, dict2):
+    test_case.assertListEqual(list(dict1.keys()), list(dict2.keys()))
+
+    for key in dict1:
+        val1 = dict1[key]
+        val2 = dict2[key]
+        if scipy.sparse.issparse(val1):
+            val1 = val1.toarray()
+        if scipy.sparse.issparse(val2):
+            val2 = val2.toarray()
+        if isinstance(val1, np.ndarray):
+            np.testing.assert_array_almost_equal(val1, val2, err_msg=str(key) + ' not equal')
+        else:
+            np.testing.assert_array_equal(val1, val2, err_msg=str(key) + ' not equal')
+
+
 def assert_adata_equal(test_case, path, test_path):
-    test_data = sc.tools.read_input(test_path)
-    data = sc.tools.read_input(path)
-    X = data.X[()]
-    test_X = test_data.X[()]
-    if scipy.sparse.issparse(X):
-        X = X.toarray()
-        test_X = test_X.toarray()
-    np.testing.assert_array_almost_equal(X, test_X)
+    test_data = sc.tools.read_input(test_path, mode='a')
+    data = sc.tools.read_input(path, mode='a')
+
+    if scipy.sparse.issparse(data.X):
+        data.X = data.X.toarray()
+    if scipy.sparse.issparse(test_data.X):
+        test_data.X = test_data.X.toarray()
+    np.testing.assert_array_almost_equal(data.X, test_data.X)
     pd.testing.assert_frame_equal(test_data.obs, data.obs)
     pd.testing.assert_frame_equal(test_data.var, data.var)
-    test_case.assertListEqual(list(test_data.uns.keys()), list(data.uns.keys()))
-    test_case.assertListEqual(list(test_data.obsm_keys()), list(data.obsm_keys()))
-    for key in data.uns_keys():
-        test_val = test_data.uns[key]
-        val = data.uns[key]
-        if scipy.sparse.issparse(val):
-            val = val.toarray()
-            test_val = test_val.toarray()
-        np.testing.assert_array_almost_equal(test_val, val)
-    for key in data.obsm_keys():
-        test_val = test_data.obsm[key]
-        val = data.obsm[key]
-        if scipy.sparse.issparse(val):
-            val = val.toarray()
-            test_val = test_val.toarray()
-        np.testing.assert_array_almost_equal(test_val, val)
+    assert_dict_of_arrays_equal(test_case, test_data.uns, data.uns)
+    assert_dict_of_arrays_equal(test_case, test_data.obsm, data.obsm)
