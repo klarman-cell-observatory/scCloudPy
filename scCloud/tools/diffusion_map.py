@@ -108,7 +108,7 @@ def calculate_diffusion_map(W, n_dc=50, alpha=0.5, solver='eigsh', random_state=
     return Phi_pt, Lambda  # , U_df, W_norm
 
 
-def diffmap(data, rep_key, n_jobs=1, n_components=50, alpha=0.5, K=100, solver='randomized', random_state=0,
+def diffmap(data, rep_key='X_pca', n_jobs=1, n_components=50, alpha=0.5, K=100, solver='randomized', random_state=0,
             full_speed=False):
     start = time.time()
 

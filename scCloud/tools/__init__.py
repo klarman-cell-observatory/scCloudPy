@@ -14,8 +14,8 @@ from .diffusion_map import diffmap, run_pseudotime_calculation, calculate_affini
 from .graph_operations import construct_graph
 from .clustering import louvain, leiden, approximate_louvain, approximate_leiden
 from .net_regressor import net_train_and_predict
-from .visualization import tsne, fitsne, umap, run_force_directed_layout, run_net_tsne, run_net_fitsne, \
-    run_net_umap, run_net_fle
+from .visualization import tsne, fitsne, umap, force_directed_layout, net_tsne, net_fitsne, \
+    net_umap, net_fle
 from .de_analysis import collect_stat_and_t_test, fisher_test, mwu_test, calc_roc_stats, diff_exp
 
 from .gradient_boosting import find_markers
