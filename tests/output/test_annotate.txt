@@ -1,0 +1,16 @@
+Cluster 1:
+    name: CD4 T cells; score: 1.00; avgp: 58.44; strong support: (IL7R+,58.44)
+Cluster 2:
+    name: CD4 T cells; score: 1.00; avgp: 77.76; strong support: (IL7R+,77.76)
+Cluster 3:
+    name: CD8 T cells; score: 1.00; avgp: 37.89; strong support: (CD8A+,37.89)
+    name: NK cells; score: 1.00; avgp: 74.34; strong support: (GNLY+,51.10),(NKG7+,97.58)
+Cluster 4:
+    name: CD14+ Monocytes; score: 1.00; avgp: 85.71; strong support: (CD14+,71.43),(LYZ+,100.00)
+    name: Dendritic Cells; score: 1.00; avgp: 53.86; strong support: (FCER1A+,7.73),(CST3+,100.00)
+    name: Megakaryocytes; score: 1.00; avgp: 5.39; strong support: (PPBP+,5.39)
+Cluster 5:
+    name: B cells; score: 1.00; avgp: 85.71; strong support: (MS4A1+,85.71)
+Cluster 6:
+    name: FCGR3A+ Monocytes; score: 1.00; avgp: 82.89; strong support: (FCGR3A+,92.11),(MS4A7+,73.68)
+    name: Megakaryocytes; score: 1.00; avgp: 7.89; strong support: (PPBP+,7.89)

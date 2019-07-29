@@ -1,0 +1,80 @@
+
+{
+	"title" : "Cell markers",
+	"cell_types" : [
+		{
+			"name" : "CD4 T cells",
+			"markers" : [
+				{
+					"genes" : ["IL7R+"],
+					"weight" : 1.0
+				}
+			]
+		},
+
+		{
+			"name" : "CD14+ Monocytes",
+			"markers" : [
+				{
+					"genes" : ["CD14+", "LYZ+"],
+					"weight" : 1.0
+				}
+			]
+		},
+		{
+			"name" : "B cells",
+			"markers" : [
+				{
+					"genes" : ["MS4A1+"],
+					"weight" : 1.0
+				}
+			]
+		},
+		{
+			"name" : "CD8 T cells",
+			"markers" : [
+				{
+					"genes" : ["CD8A+"],
+					"weight" : 1.0
+				}
+			]
+		},
+		{
+			"name" : "NK cells",
+			"markers" : [
+				{
+					"genes" : ["GNLY+", "NKG7+"],
+					"weight" : 1.0
+				}
+			]
+		},
+		{
+			"name" : "FCGR3A+ Monocytes",
+			"markers" : [
+				{
+					"genes" : ["FCGR3A+", "MS4A7+"],
+					"weight" : 1.0
+				}
+			]
+		},
+		{
+			"name" : "Dendritic Cells",
+			"markers" : [
+				{
+					"genes" : ["FCER1A+", "CST3+"],
+					"weight" : 1.0
+				}
+			]
+		},
+		{
+			"name" : "Megakaryocytes",
+			"markers" : [
+				{
+					"genes" : ["PPBP+"],
+					"weight" : 1.0
+				}
+			]
+		}
+	]
+}
+
