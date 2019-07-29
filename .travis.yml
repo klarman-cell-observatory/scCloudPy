@@ -17,7 +17,7 @@ sudo: true
 
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install fftw-devel
+  - sudo apt-get install fftw3
 install:
   - pip install cython
   - pip install pybind11
