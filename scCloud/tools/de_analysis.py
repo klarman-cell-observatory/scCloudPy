@@ -305,7 +305,7 @@ test2fields = {'t': ['t_pval', 't_qval'], 'fisher': ['fisher_pval', 'fisher_qval
                'mwu': ['mwu_U', 'mwu_pval', 'mwu_qval']}
 
 
-def markers(data, labels, n_jobs=None, run_fisher=True, run_mwu=True, run_roc=True):
+def diff_exp(data, labels, n_jobs=None, run_fisher=True, run_mwu=True, run_roc=True):
     if n_jobs is None:
         n_jobs = os.cpu_count()
     __markers(data, data.X, labels, n_jobs=n_jobs, run_fisher=run_fisher, run_mwu=run_mwu, run_roc=run_roc)

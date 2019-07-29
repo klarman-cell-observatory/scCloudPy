@@ -1,0 +1,22 @@
+dist: xenial   # required for Python >= 3.7
+language: python
+notifications:
+  email: false
+sudo: true
+python:
+  - '3.5'
+  - '3.6'
+  - '3.7'
+cache:
+  directories:
+    - "$HOME/.cache/pip"
+    - "$HOME/.pyenv"
+
+env:
+  - MPLBACKEND=Agg
+
+install:
+  - pip install .
+
+script:
+  - python -m unittest
