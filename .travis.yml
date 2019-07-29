@@ -2,7 +2,6 @@ dist: xenial   # required for Python >= 3.7
 language: python
 notifications:
   email: false
-sudo: true
 python:
   - '3.5'
   - '3.6'
@@ -16,6 +15,7 @@ env:
   - MPLBACKEND=Agg
 
 install:
+  - pip install cython
   - pip install .
 
 script:
