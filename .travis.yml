@@ -16,6 +16,7 @@ env:
 
 install:
   - pip install cython
+  - pip install pybind11
   - pip install .
 
 script:
