@@ -15,7 +15,7 @@ def assert_excel_equal(test_case, path, test_path):
 def assert_dict_of_arrays_equal(test_case, dict1, dict2):
     test_case.assertListEqual(list(dict1.keys()), list(dict2.keys()))
 
-    for key in dict1:
+    for key in dict1.keys():
         val1 = dict1[key]
         val2 = dict2[key]
         if scipy.sparse.issparse(val1):
