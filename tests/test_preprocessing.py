@@ -13,7 +13,7 @@ class TestPreprocessing(unittest.TestCase):
         adata = anndata.AnnData(X)
         adata.var['robust'] = True
         sc.tools.log_norm(adata, 10)
-        np.testing.assert_allclose(np.expm1(adata.X.toarray()).sum(axis=1), 10, rtol=1e-7, atol=0)
+        np.testing.assert_allclose(np.expm1(adata.X.toarray()).sum(axis=1), 10, rtol=1e-6, atol=0)
 
     def test_filter_cells_cite_seq(self):
         X = csr_matrix([[1, 11], [2, 20], [5, 6]])
