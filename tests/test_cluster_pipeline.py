@@ -17,11 +17,12 @@ class TestClusterPipeline(unittest.TestCase):
              '--run-net-tsne', '--run-net-fitsne', '--run-net-umap', '--run-fitsne'])
         cmd.execute()
         assert_adata_files_equal(self, os.path.join('tests', 'output', 'test_cluster.h5ad'), 'test_cluster.h5ad',
-            obs_blacklist=set(['approx_leiden_labels']))
+            obs_blacklist=set(['approx_leiden_labels', 'leiden_labels']))
         # approx_leiden_labels for 3rd cell differs between mac and linux
         test_data = sc.tools.read_input('test_cluster.h5ad', mode='a')
         data = sc.tools.read_input(os.path.join('tests', 'output', 'test_cluster.h5ad'), mode='a')
         self.assertLessEqual((data.obs['approx_leiden_labels'] != test_data.obs['approx_leiden_labels']).sum(), 1)
+        self.assertLessEqual((data.obs['leiden_labels'] != test_data.obs['leiden_labels']).sum(), 1)
         # '--run-approximated-louvain',
         # '--run-louvain',
         # '--run-fle',
