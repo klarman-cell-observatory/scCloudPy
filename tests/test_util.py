@@ -28,7 +28,7 @@ def assert_dict_of_arrays_equal(test_case, dict1, dict2, blacklist):
             if scipy.sparse.issparse(val2):
                 val2 = val2.toarray()
             if isinstance(val1, np.ndarray):
-                np.testing.assert_array_almost_equal(val1, val2, err_msg=str(key) + ' not equal')
+                np.testing.assert_array_almost_equal(val1, val2, err_msg=str(key) + ' not equal', decimal=5)
             else:
                 np.testing.assert_array_equal(val1, val2, err_msg=str(key) + ' not equal')
 
