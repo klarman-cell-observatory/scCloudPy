@@ -1,27 +1,27 @@
-dist: xenial   # required for Python >= 3.7
+#dist: xenial   # required for Python >= 3.7
+sudo: required
+services:
+  - docker
+
 language: python
 notifications:
   email: false
-python:
-  - '3.6'
-  - '3.7'
-cache:
-  directories:
-    - "$HOME/.cache/pip"
-    - "$HOME/.pyenv"
 
-env:
-  - MPLBACKEND=Agg
-sudo: true
+#cache:
+#  directories:
+#    - "$HOME/.cache/pip"
+#    - "$HOME/.pyenv"
+
 
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libfftw3-dev
-install:
-  - pip install cython
-  - pip install pybind11
-  - pip install xlrd
-  - pip install .
+  #  - sudo apt-get -qq update
+  #  - sudo apt-get install -y libfftw3-dev
+  - docker build -t sccloud/sccloudpy .
+  - docker run -d -p 127.0.0.1:80:4567 sccloud/sccloudpy /bin/sh -c "cd /scCloudPy; python -m unittest;"
+#install:
+#  - pip install cython pybind11 xlrd
+#  - pip install .
 
-script:
-  - python -m unittest
+#script:
+#  - python -m unittest
+

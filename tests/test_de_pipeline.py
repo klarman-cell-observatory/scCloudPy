@@ -2,7 +2,7 @@ import unittest
 import os
 import shutil
 import scCloud.commands
-from .test_util import assert_excel_equal, assert_adata_files_equal
+from .test_util import assert_files_equal, assert_excel_equal, is_running_in_docker
 
 
 class TestDePipeline(unittest.TestCase):
@@ -18,8 +18,11 @@ class TestDePipeline(unittest.TestCase):
             ['de_analysis', 'test_de.h5ad', 'test_de.xlsx', '--fisher',
              '--mwu', '--roc', '--labels', 'leiden_labels'])
         cmd.execute()
+        # if is_running_in_docker():
+        #     assert_files_equal(self, os.path.join('tests', 'output', 'test_de.xlsx'), 'test_de.xlsx')
+        #     assert_files_equal(self, os.path.join('tests', 'output', 'test_de.h5ad'), 'test_de.h5ad')
+        # else:
         assert_excel_equal(self, os.path.join('tests', 'output', 'test_de.xlsx'), 'test_de.xlsx')
-        assert_adata_files_equal(self, os.path.join('tests', 'output', 'test_de.h5ad'), 'test_de.h5ad')
 
 
 if __name__ == '__main__':

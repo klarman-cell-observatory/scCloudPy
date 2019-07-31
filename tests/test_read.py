@@ -1,6 +1,7 @@
 import unittest
 
 import scCloud as sc
+from .test_util import assert_adata_equal
 
 
 class TestRead(unittest.TestCase):
@@ -20,6 +21,12 @@ class TestRead(unittest.TestCase):
     def test_mtx_v3_dir(self):
         adata = sc.tools.read_input('tests/data/hgmm_1k_v3_filtered_feature_bc_matrix/')
         self.assertEqual(adata.shape[0], 1046)
+
+    def test_read_write_h5ad(self):
+        adata = sc.tools.read_input('tests/data/hgmm_1k_v3_filtered_feature_bc_matrix/')
+        sc.tools.write_output(adata, 'test.h5ad')
+        adata2 = sc.tools.read_input('test.h5ad', mode='a')
+        assert_adata_equal(self, adata, adata2)
 
 
 if __name__ == '__main__':
