@@ -106,9 +106,9 @@ def pca(data, standardize=True, max_value=10, nPC=50, random_state=0, features=N
     pca = PCA(n_components=nPC, random_state=random_state)
     X_pca = pca.fit_transform(data.X)
     orig_data.obsm['X_pca'] = X_pca
-   # orig_data.varm['PCs'] = pca.components_.T
+    # orig_data.varm['PCs'] = pca.components_.T
     orig_data.uns['pca'] = {}
-    orig_data.uns['pca']['components'] = pca.components_.T
+    orig_data.uns['pca']['components'] = pca.components_
     orig_data.uns['pca']['variance'] = pca.explained_variance_
     orig_data.uns['pca']['variance_ratio'] = pca.explained_variance_ratio_
     end = time.time()
