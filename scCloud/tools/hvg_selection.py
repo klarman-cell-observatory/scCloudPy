@@ -73,6 +73,10 @@ def select_hvg_scCloud(data, consider_batch, n_top=2000, span=0.02, plot_hvg_fig
         mean = X.mean(axis=0).A1
         m2 = X.power(2).sum(axis=0).A1
         var = (m2 - X.shape[0] * (mean ** 2)) / (X.shape[0] - 1)
+        data.var['mean'] = np.nan
+        data.var['var'] = np.nan
+        data.var.loc[robust_idx, 'mean'] = mean
+        data.var.loc[robust_idx, 'var'] = var
 
     lobj = sl.loess(mean, var, span=span, degree=2)
     lobj.fit()
@@ -92,11 +96,12 @@ def select_hvg_scCloud(data, consider_batch, n_top=2000, span=0.02, plot_hvg_fig
     if plot_hvg_fig is not None:
         plot_hvg(mean, var, lobj.outputs.fitted_values, hvg_index, plot_hvg_fig + '.hvg.pdf')
 
-    if 'hvg_rank' not in data.var:
-        data.var['hvg_rank'] = -1
+    data.var['hvg_loess'] = np.nan
+    data.var.loc[robust_idx, 'hvg_loess'] = lobj.outputs.fitted_values
+
+    data.var['hvg_rank'] = -1
     data.var.loc[robust_idx, 'hvg_rank'] = hvg_rank
-    if 'highly_variable_genes' not in data.var:
-        data.var['highly_variable_genes'] = True
+    data.var['highly_variable_genes'] = True
     data.var.loc[robust_idx, 'highly_variable_genes'] = hvg_index
 
 
@@ -182,7 +187,7 @@ def find_variable_features(data, consider_batch=False, flavor='scCloud', n_top=2
         consider_batch = False
 
     if flavor == 'scCloud':
-        select_hvg_scCloud(data, consider_batch, n_top=n_top, span=span, plot_hvg_fig=plot_hvg_fig)
+       select_hvg_scCloud(data, consider_batch, n_top=n_top, span=span, plot_hvg_fig=plot_hvg_fig)
     else:
         assert flavor == 'Seurat'
         select_hvg_seurat(data, consider_batch, n_top=n_top, min_disp=min_disp, max_disp=max_disp, min_mean=min_mean,
