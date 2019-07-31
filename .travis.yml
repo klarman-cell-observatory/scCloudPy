@@ -17,11 +17,12 @@ before_install:
   #  - sudo apt-get -qq update
   #  - sudo apt-get install -y libfftw3-dev
   - docker build -t sccloud/sccloudpy .
-  - docker run -d -p 127.0.0.1:80:4567 sccloud/sccloudpy /bin/sh -c "cd /scCloudPy; python -m unittest;"
+
 #install:
 #  - pip install cython pybind11 xlrd
 #  - pip install .
 
-#script:
-#  - python -m unittest
+script:
+  #  - python -m unittest
+  - docker run -d -p 127.0.0.1:80:4567 sccloud/sccloudpy /bin/sh -c "cd /scCloudPy; python -m unittest;"
 

@@ -8,8 +8,7 @@ RUN apt-get update && apt-get install -y \
 		python3-igraph \
 		libxml2-dev \
 		cmake \
-		libfftw3-dev \
-		git
+		libfftw3-dev
 
 RUN apt-get clean && \
      rm -rf /var/lib/apt/lists/*
