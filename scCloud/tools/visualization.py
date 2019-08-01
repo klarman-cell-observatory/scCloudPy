@@ -60,7 +60,7 @@ def calc_umap(X, n_components, n_neighbors, min_dist, spread, random_state, init
         X = check_array(X, dtype=np.float32, accept_sparse='csr')
         umap_obj._raw_data = X
         if umap_obj.a is None or umap_obj.b is None:
-            umap_obj._a, umap_obj._b = umap.umap_.find_ab_params(umap_obj.spread, umap_obj.min_dist)
+            umap_obj._a, umap_obj._b = um.umap_.find_ab_params(umap_obj.spread, umap_obj.min_dist)
         else:
             umap_obj._a = umap_obj.a
             umap_obj._b = umap_obj.b
@@ -87,14 +87,14 @@ def calc_umap(X, n_components, n_neighbors, min_dist, spread, random_state, init
             print("Construct fuzzy simplicial set")
 
         umap_obj._small_data = False
-        umap_obj.graph_ = umap.umap_.fuzzy_simplicial_set(X, umap_obj.n_neighbors, _random_state, umap_obj.metric,
+        umap_obj.graph_ = um.umap_.fuzzy_simplicial_set(X, umap_obj.n_neighbors, _random_state, umap_obj.metric,
             umap_obj._metric_kwds, knn_indices, knn_dists, umap_obj.angular_rp_forest, umap_obj.set_op_mix_ratio,
             umap_obj.local_connectivity, umap_obj.verbose)
 
         _n_epochs = umap_obj.n_epochs if umap_obj.n_epochs is not None else 0
         if umap_obj.verbose:
             print("Construct embedding")
-        embedding = umap.umap_.simplicial_set_embedding(X, umap_obj.graph_, umap_obj.n_components,
+        embedding = um.umap_.simplicial_set_embedding(X, umap_obj.graph_, umap_obj.n_components,
             umap_obj._initial_alpha, umap_obj._a, umap_obj._b, umap_obj.repulsion_strength,
             umap_obj.negative_sample_rate, _n_epochs, _init, _random_state, umap_obj.metric, umap_obj._metric_kwds,
             umap_obj.verbose)

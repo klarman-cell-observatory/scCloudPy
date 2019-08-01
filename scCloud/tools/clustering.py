@@ -7,7 +7,7 @@ from natsort import natsorted
 import ctypes
 import ctypes.util
 
-import louvain
+import louvain as lvn
 import leidenalg
 from sklearn.cluster import KMeans
 
@@ -26,10 +26,10 @@ def louvain(data, affinity='W', partition_type='RBC', resolution=1.3, random_sta
     G = construct_graph(W)
 
     assert partition_type == 'RBC' or partition_type == 'CPM'
-    partition_type = louvain.RBConfigurationVertexPartition if partition_type == 'RBC' else louvain.CPMVertexPartition
+    partition_type = lvn.RBConfigurationVertexPartition if partition_type == 'RBC' else lvn.CPMVertexPartition
 
     partition = partition_type(G, resolution_parameter=resolution, weights='weight')
-    optimiser = louvain.Optimiser()
+    optimiser = lvn.Optimiser()
     optimiser.set_rng_seed(random_state)
     diff = optimiser.optimise_partition(partition)
 
@@ -159,12 +159,12 @@ def approximate_louvain(data, rep_key, affinity='W', partition_type='RBC', resol
     G = construct_graph(W)
 
     assert partition_type == 'RBC' or partition_type == 'CPM'
-    partition_type = louvain.RBConfigurationVertexPartition if partition_type == 'RBC' else louvain.CPMVertexPartition
+    partition_type = lvn.RBConfigurationVertexPartition if partition_type == 'RBC' else lvn.CPMVertexPartition
 
     partition = partition_type(G, resolution_parameter=resolution, weights='weight', initial_membership=labels)
     partition_agg = partition.aggregate_partition()
 
-    optimiser = louvain.Optimiser()
+    optimiser = lvn.Optimiser()
     optimiser.set_rng_seed(random_state)
     diff = optimiser.optimise_partition(partition_agg)
     partition.from_coarse_partition(partition_agg)
