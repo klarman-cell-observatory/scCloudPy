@@ -33,17 +33,20 @@ def update_var_names(data):
     print("update_var_names is finished. Time spent = {:.2f}s.".format(end - start))
 
 
-def qc_metrics(data, mito_prefix='MT-', percent_cells=0.0005):
+def qc_metrics(data, mito_prefix='MT-', min_genes=500,
+               max_genes=6000, min_umis=100, max_umis=600000, percent_mito=0.1, min_genes_on_raw=100,
+               percent_cells=0.0005):
     """
-    Sets n_genes, n_counts, percent_mito on adata.obs and n_cells, percent_cells, and robust on data.var
+   Sets passed_qc, n_genes, n_counts, percent_mito on data.obs and passed_qc, n_cells, percent_cells, and robust on data.var
 
-    :param data:
-        Annotated data matrix
-    :param mito_prefix: str
-        String that mitochrondrial genes start with
-    :param percent_cells: float
-        Cutoff for a feature to be `robust`
-    """
+   :param data:
+       Annotated data matrix
+   :param mito_prefix: str
+       String that mitochrondrial genes start with
+   :param percent_cells: float
+       Cutoff for a feature to be `robust`
+   """
+    data.obs['passed_qc'] = False
     data.obs['n_genes'] = data.X.getnnz(axis=1)
     data.obs['n_counts'] = data.X.sum(axis=1).A1
     mito_prefixes = mito_prefix.split(',')
@@ -56,9 +59,24 @@ def qc_metrics(data, mito_prefix='MT-', percent_cells=0.0005):
 
     mito_genes = data.var_names.map(startswith).values.nonzero()[0]
     data.obs['percent_mito'] = data.X[:, mito_genes].sum(axis=1).A1 / np.maximum(data.obs['n_counts'].values, 1.0)
-    data.var['n_cells'] = data.X.getnnz(axis=0)
-    data.var['percent_cells'] = data.var['n_cells'] / data.shape[0]
-    data.var['robust'] = data.var['percent_cells'] >= percent_cells
+
+    # Assign passed_qc
+    filters = [data.obs['n_genes'] >= min_genes, data.obs['n_genes'] < max_genes, data.obs['n_counts'] >= min_umis,
+               data.obs['n_counts'] < max_umis, data.obs['percent_mito'] < percent_mito]
+    if data.obs['n_genes'].min() == 0:  # if raw.h5
+        filters.append(data.obs['n_genes'] >= min_genes_on_raw)
+
+    data.obs.loc[np.logical_and.reduce(filters), 'passed_qc'] = True
+
+    var = data.var
+    data = data[data.obs['passed_qc']]  # compute gene stats in space of filtered cells only
+    var['passed_qc'] = False
+    var['n_cells'] = data.X.getnnz(axis=0)
+    var['percent_cells'] = var['n_cells'] / data.shape[0]
+    var['robust'] = var['percent_cells'] >= percent_cells
+    var['highly_variable_genes'] = var['robust']  # default all robust genes are "highly" variable
+    var['hvg_rank'] = -1  # default all ranks are -1
+    var.loc[var['n_cells'] > 0, 'passed_qc'] = True
 
 
 def filter_cells_cite_seq(data, max_cells):
@@ -114,6 +132,48 @@ def pca(data, standardize=True, max_value=10, nPC=50, random_state=0, features=N
     end = time.time()
     print("PCA is done. Time spent = {:.2f}s.".format(end - start))
 
+
+def filter_data(data, mito_prefix='MT-', min_genes=500, max_genes=6000, min_umis=100, max_umis=600000, percent_mito=0.1,
+                percent_cells=0.0005, min_genes_on_raw=100):
+    if 'n_genes' not in data.obs:
+        raise ValueError('Please run qc_metrics before filtering')
+
+    if data.obs['n_genes'].min() == 0:  # if raw.h5
+        data._inplace_subset_obs(data.obs['n_genes'].values >= min_genes_on_raw)
+
+    # Filter cells
+    obs_index = np.logical_and.reduce((data.obs['n_genes'] >= min_genes,
+                                       data.obs['n_genes'] < max_genes,
+                                       data.obs['n_counts'] >= min_umis,
+                                       data.obs['n_counts'] < max_umis,
+                                       data.obs['percent_mito'] < percent_mito))
+    data._inplace_subset_obs(obs_index)
+
+    # Filter genes
+    data.var['n_cells'] = data.X.getnnz(axis=0)
+    data.var['percent_cells'] = data.var['n_cells'] / data.shape[0]
+    data.var['robust'] = data.var['percent_cells'] >= percent_cells
+
+    data.var['highly_variable_genes'] = data.var['robust']  # default all robust genes are "highly" variable
+    data.var['hvg_rank'] = -1  # default all ranks are -1
+
+    if output_filt is not None:
+        idx = data.var['robust'] == False
+        df = pd.DataFrame(
+            {'n_cells': data.var.loc[idx, 'n_cells'], 'percent_cells': data.var.loc[idx, 'percent_cells']})
+        df.index.name = 'gene'
+        df.sort_values('n_cells', ascending=False, inplace=True)
+        df.to_excel(writer, sheet_name="Gene filtration stats")
+        writer.save()
+        print("Filtration results are written.")
+
+    var_index = (data.var['n_cells'] > 0).values
+    data._inplace_subset_var(var_index)
+    print("After filteration, {nc} cells and {ng} genes are kept. Among {ng} genes, {nrb} genes are robust.".format(
+        nc=data.shape[0], ng=data.shape[1], nrb=data.var['robust'].sum()))
+
+    end = time.time()
+    print("filter_data is finished. Time spent = {:.2f}s.".format(end - start))
 
 # def run_rpca(data, scale = False, max_value = 10.0, nPC = 50, random_state = 0):
 # 	""" smooth outliers, then no center/scale data """
