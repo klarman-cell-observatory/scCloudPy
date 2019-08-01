@@ -43,7 +43,6 @@ pytz==2019.2
 requests==2.21.0
 retrying==1.3.3
 ruamel-yaml==0.15.46
--e git+https://github.com/klarman-cell-observatory/scCloudPy.git@0b4532da61bd44e1fd8d0d82e201951e3415db8f#egg=scCloud
 scikit-learn==0.21.1
 scikit-misc==0.1.1
 scipy==1.2.1
