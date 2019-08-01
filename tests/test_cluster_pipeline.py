@@ -1,7 +1,7 @@
 import unittest
 import os
 import scCloud.commands
-from .test_util import assert_files_equal, assert_adata_files_equal
+from .test_util import assert_adata_files_equal
 
 
 class TestClusterPipeline(unittest.TestCase):
@@ -15,15 +15,16 @@ class TestClusterPipeline(unittest.TestCase):
              'test_cluster', '--run-leiden',
              '--run-approximated-leiden', '--run-tsne', '--run-umap',
              '--run-net-tsne', '--run-net-fitsne', '--run-net-umap', '--run-fitsne', '--run-fle',
-             '--run-net-fle', '--plot-hvg'])  # '--run-louvain', '--run-approximated-louvain'
+             '--run-net-fle', '--plot-hvg', '--run-louvain', '--run-approximated-louvain'])
         cmd.execute()
         #
         # if is_running_in_docker:
         #     assert_files_equal(self, os.path.join('tests', 'output', 'test_cluster.h5ad'), 'test_cluster.h5ad')
         #     assert_files_equal(self, os.path.join('tests', 'output', 'test_cluster.hvg.pdf'), 'test_cluster.hvg.pdf')
         # else:
-        # TODO add louvain, diff pdfs
+        # TODO diff pdfs
         assert_adata_files_equal(self, os.path.join('tests', 'output', 'test_cluster.h5ad'), 'test_cluster.h5ad')
 
-        if __name__ == '__main__':
-            unittest.main()
+
+if __name__ == '__main__':
+    unittest.main()
