@@ -42,7 +42,8 @@ RUN pip install 'matplotlib>=2.0.0' \
                             'fisher-modified' \
                             'hnswlib-modified' \
                             'louvain-github' \
-                            'MulticoreTSNE-modified'
+                            'MulticoreTSNE-modified' \
+                            'fitsne'
 
 COPY . /scCloud/
 WORKDIR /scCloud/
